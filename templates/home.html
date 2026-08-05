@@ -1,0 +1,701 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Expense Tracker
+{% endblock %}
+
+{% block content %}
+<!-- ================= HEADER ================= -->
+
+<div class="text-center mb-5">
+
+    <div class="display-4 mb-2">
+        💰
+    </div>
+
+    <h1 class="fw-bold text-primary">
+
+        Expense Tracker
+
+    </h1>
+
+    <p class="text-secondary">
+
+        Track • Analyze • Manage Your Expenses
+
+    </p>
+
+    <div class="mt-4">
+
+        <a href="{% url 'add_expense' %}"
+           class="btn btn-primary btn-lg">
+
+            <i class="bi bi-plus-circle-fill"></i>
+
+            Add Expense
+
+        </a>
+
+        <a href="{% url 'download_report' %}?search={{ search_query }}&category={{ category_filter }}&month={{ month_filter }}&year={{ year_filter }}"
+            class="btn btn-success btn-lg ms-2">
+
+             <i class="bi bi-download"></i>
+
+             Download PDF
+
+         </a>
+
+    </div>
+
+</div>
+<!-- ================= DASHBOARD ================= -->
+
+<div class="row g-4 mb-5">
+
+    <!-- Total Expense -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card shadow border-0 h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-wallet2 display-4 text-success"></i>
+
+                <h6 class="mt-3">
+
+                    Total Expense
+
+                </h6>
+
+                <h2 class="text-success fw-bold">
+
+                    ₹ {{ total }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Transactions -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card shadow border-0 h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-receipt display-4 text-primary"></i>
+
+                <h6 class="mt-3">
+
+                    Transactions
+
+                </h6>
+
+                <h2 class="text-primary fw-bold">
+
+                    {{ total_transactions }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Categories -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card shadow border-0 h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-tags-fill display-4 text-warning"></i>
+
+                <h6 class="mt-3">
+
+                    Categories
+
+                </h6>
+
+                <h2 class="text-warning fw-bold">
+
+                    {{ total_categories }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- This Month -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card shadow border-0 h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-calendar-event display-4 text-danger"></i>
+
+                <h6 class="mt-3">
+
+                    This Month
+
+                </h6>
+
+                <h2 class="text-danger fw-bold">
+
+                    ₹ {{ this_month_expense }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <!-- ================= ANALYTICS ================= -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-calendar2-week display-5 text-primary"></i>
+
+                <h6 class="mt-3">
+                    Last 30 Days
+                </h6>
+
+                <h4 class="fw-bold text-primary">
+                    ₹ {{ last_30_total }}
+                </h4>
+
+                <small class="text-muted">
+                    {{ last_30_transactions }} Transactions
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-trophy-fill display-5 text-warning"></i>
+
+                <h6 class="mt-3">
+                    Top Category
+                </h6>
+
+                <h4 class="fw-bold text-warning">
+
+                    {{ highest_category }}
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-graph-up-arrow display-5 text-success"></i>
+
+                <h6 class="mt-3">
+                    Avg / Day
+                </h6>
+
+                <h4 class="fw-bold text-success">
+
+                    ₹ {{ average_daily_expense }}
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-cash-stack display-5 text-danger"></i>
+
+                <h6 class="mt-3">
+                    Biggest Expense
+                </h6>
+
+                {% if biggest_expense %}
+
+                <h4 class="fw-bold text-danger">
+                    ₹ {{ biggest_expense.amount }}
+                </h4>
+
+                <small class="text-muted">
+                    {{ biggest_expense.title }}
+                </small>
+
+                {% else %}
+
+                <h4 class="fw-bold text-danger">
+                    ₹ 0
+                </h4>
+
+                <small class="text-muted">
+                    No Expenses
+                </small>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <div class="card-body">
+
+<form method="GET">
+
+<div class="row g-3">
+
+    <!-- Search -->
+    <div class="col-lg-3">
+
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search expenses..."
+            value="{{ search_query }}">
+
+    </div>
+
+    <!-- Category -->
+    <div class="col-lg-2">
+
+        <select
+            class="form-select"
+            name="category">
+
+            <option value="">All Categories</option>
+
+            {% for category in categories %}
+
+            <option
+                value="{{ category }}"
+                {% if category == category_filter %}selected{% endif %}>
+
+                {{ category }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <!-- Month -->
+    <div class="col-lg-2">
+
+        <select
+            class="form-select"
+            name="month">
+
+            <option value="">All Months</option>
+
+            {% for num,name in months %}
+
+            <option
+                value="{{ num }}"
+                {% if month_filter == num|stringformat:"s" %}
+                selected
+                {% endif %}>
+
+                {{ name }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <!-- Year -->
+    <div class="col-lg-2">
+
+        <select
+            class="form-select"
+            name="year">
+
+            <option value="">All Years</option>
+
+            {% for year in years %}
+
+            <option
+                value="{{ year }}"
+                {% if year_filter == year|stringformat:"s" %}
+                selected
+                {% endif %}>
+
+                {{ year }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <!-- Search -->
+    <div class="col-lg-2">
+
+        <button
+            class="btn btn-primary w-100"
+            type="submit">
+
+            Search
+
+        </button>
+
+    </div>
+
+    <!-- Clear -->
+    <div class="col-lg-1">
+
+        <a
+            href="{% url 'home' %}"
+            class="btn btn-secondary w-100">
+
+            Reset
+
+        </a>
+
+    </div>
+
+</div>
+
+</form>
+
+</div>
+<!-- ================= EXPENSE TABLE ================= -->
+
+<div class="row">
+
+    <!-- Expense Table -->
+
+    <div class="col-lg-8 mb-4">
+
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+
+                    <i class="bi bi-list-ul"></i>
+
+                    Recent Expenses
+
+                </h5>
+
+                <span class="badge bg-light text-dark">
+
+                    {{ total_transactions }} Transactions
+
+                </span>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-primary">
+
+                            <tr>
+
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Amount</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th class="text-center">Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for expense in expenses %}
+
+                            <tr>
+
+                                <td>
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ expense.title }}
+
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-success">
+
+                                        ₹ {{ expense.amount }}
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    {% if expense.category == "Food" %}
+
+                                        <span class="badge bg-success">
+
+                                            {{ expense.category }}
+
+                                        </span>
+
+                                    {% elif expense.category == "Shopping" %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            {{ expense.category }}
+
+                                        </span>
+
+                                    {% elif expense.category == "Bills" %}
+
+                                        <span class="badge bg-danger">
+
+                                            {{ expense.category }}
+
+                                        </span>
+
+                                    {% elif expense.category == "Travel" %}
+
+                                        <span class="badge bg-primary">
+
+                                            {{ expense.category }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ expense.category }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {{ expense.date }}
+
+                                </td>
+
+                                <td>
+
+                                    <div class="d-flex justify-content-center gap-2">
+
+                                        <a href="{% url 'edit_expense' expense.id %}"
+                                           class="btn btn-warning btn-sm">
+
+                                            <i class="bi bi-pencil-square"></i>
+
+                                        </a>
+
+                                        <form action="{% url 'delete_expense' expense.id %}"
+                                              method="POST"
+                                              onsubmit="return confirm('Delete this expense?');">
+
+                                            {% csrf_token %}
+
+                                            <button class="btn btn-danger btn-sm">
+
+                                                <i class="bi bi-trash-fill"></i>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+
+                                <td colspan="6" class="text-center py-5">
+
+                                    <i class="bi bi-wallet2 display-4 text-secondary"></i>
+
+                                    <br><br>
+
+                                    <h5>
+
+                                        No Expenses Found
+
+                                    </h5>
+
+                                    <p class="text-muted">
+
+                                        Click the <strong>Add Expense</strong> button to create your first expense.
+
+                                    </p>
+
+                                    <a href="{% url 'add_expense' %}"
+                                       class="btn btn-primary">
+
+                                        <i class="bi bi-plus-circle"></i>
+
+                                        Add Expense
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+<!-- ================= PIE CHART ================= -->
+
+<div class="col-lg-4 mb-4">
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-success text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-pie-chart-fill"></i>
+
+                Expense Distribution
+
+            </h5>
+
+        </div>
+
+        <div class="card-body text-center">
+
+            <div class="text-center">
+                <img
+                    src="data:image/png;base64,{{ graph }}"
+                    class="img-fluid"
+                    style="max-width:75%;"
+                    alt="Expense Chart"
+                >
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================= MONTHLY SPENDING ================= -->
+
+<div class="card shadow border-0 mt-4">
+
+    <div class="card-header bg-info text-white">
+
+        <h5 class="mb-0">
+
+            <i class="bi bi-bar-chart-fill"></i>
+
+            Monthly Spending
+
+        </h5>
+
+    </div>
+
+    <div class="card-body text-center">
+
+        <img
+            src="data:image/png;base64,{{ monthly_graph }}"
+            class="img-fluid"
+            alt="Monthly Spending Chart">
+
+    </div>
+
+</div>
+<!-- ================= FOOTER ================= -->
+
+<footer class="text-center mt-5 mb-3">
+
+    <hr>
+
+    <p class="text-muted">
+
+        <i class="bi bi-c-circle"></i>
+
+        2026 Expense Tracker |
+
+        Built with ❤️ using Django, Bootstrap & Matplotlib
+
+    </p>
+
+</footer>
+
+{% endblock %}

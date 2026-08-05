@@ -1,0 +1,121 @@
+/* ===============================
+      DASHBOARD CARDS
+================================ */
+
+.dashboard-card{
+
+    border:none;
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    transition:all .35s ease;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    background:#fff;
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.18);
+
+}
+
+.dashboard-card .card-body{
+
+    padding:30px;
+
+}
+
+.dashboard-icon{
+
+    width:80px;
+
+    height:80px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:auto;
+
+    font-size:34px;
+
+}
+
+.card-title{
+
+    font-size:18px;
+
+    font-weight:600;
+
+    color:#555;
+
+}
+
+.card-value{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-top:10px;
+
+    margin-bottom:10px;
+
+}
+
+/* ===============================
+        ACTION TOOLBAR
+================================ */
+
+.input-group-text{
+
+    border-radius:12px 0 0 12px;
+
+}
+
+.form-control{
+
+    border-radius:0 12px 12px 0;
+
+}
+
+.form-select{
+
+    border-radius:12px;
+
+}
+
+.btn{
+
+    border-radius:12px;
+
+}
+
+/* Header */
+
+.app-title{
+
+    font-size:60px;
+
+    font-weight:700;
+
+}
+
+.app-subtitle{
+
+    font-size:20px;
+
+    color:#777;
+
+}

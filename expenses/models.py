@@ -1,6 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
 CATEGORY_CHOICES = [
     ('Food', 'Food'),
     ('Travel', 'Travel'),
@@ -9,11 +9,26 @@ CATEGORY_CHOICES = [
     ('Others', 'Others'),
 ]
 
+
 class Expense(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='expenses'
+    )
+
     title = models.CharField(max_length=50)
+
     amount = models.FloatField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES
+    )
+
     date = models.DateField()
+
     notes = models.TextField(blank=True)
 
     def __str__(self):

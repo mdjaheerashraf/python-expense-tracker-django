@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Expense
+{% endblock %}
+
+{% block content %}
+
+<div class="row align-items-center mb-4">
+
+    <div class="col-md-3">
+
+        <a href="{% url 'home' %}" class="btn btn-primary">
+            <i class="bi bi-house-fill"></i>
+            Home
+        </a>
+
+    </div>
+
+    <div class="col-md-6 text-center">
+
+        <h1 class="fw-bold text-primary">
+
+            <i class="bi bi-plus-circle-fill"></i>
+
+            Add Expense
+
+        </h1>
+
+    </div>
+
+    <div class="col-md-3 text-end">
+
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left-circle"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-7">
+
+        <div class="card shadow-lg border-0 rounded-4">
+
+            <div class="card-header bg-primary text-white">
+
+                <h4 class="mb-0">
+
+                    <i class="bi bi-wallet2"></i>
+
+                    Expense Details
+
+                </h4>
+
+            </div>
+
+            <div class="card-body p-4">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Title
+
+                        </label>
+
+                        {{ form.title }}
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Amount
+
+                        </label>
+
+                        {{ form.amount }}
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Category
+
+                        </label>
+
+                        {{ form.category }}
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            Date
+
+                        </label>
+
+                        {{ form.date }}
+
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+
+                            <i class="bi bi-arrow-left"></i>
+
+                            Cancel
+
+                        </a>
+
+                        <button type="submit" class="btn btn-success">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            Save Expense
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
